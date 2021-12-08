@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/presentation/View/SignIn/signin.view.dart';
 import 'package:food_app/presentation/View/SignUp/signup.view.dart';
 import 'package:food_app/presentation/View/Welcome/welcome.view.dart';
 
@@ -16,6 +17,12 @@ class AppRoutes {
         {
           return MaterialPageRoute(
             builder: (context) => SignUpView(),
+          );
+        }
+      case "/signin":
+        {
+          return MaterialPageRoute(
+            builder: (context) => SignInView(),
           );
         }
     }

@@ -67,23 +67,26 @@ class _SignUpViewState extends State<SignUpView> {
                   SizedBox(
                     height: 20.0,
                   ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Already have an account? ",
-                          style: TextStyle(
-                            color: Colors.black,
+                  InkWell(
+                    onTap: () => Navigator.pushNamed(context, "/signin"),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Already have an account? ",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                        TextSpan(
-                          text: "Login ",
-                          style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
+                          TextSpan(
+                            text: "Signin ",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],

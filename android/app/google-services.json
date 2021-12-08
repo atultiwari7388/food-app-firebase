@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "22021596052",
+    "project_id": "food-firebase-7cd08",
+    "storage_bucket": "food-firebase-7cd08.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:22021596052:android:f1d594552de14714b2e581",
+        "android_client_info": {
+          "package_name": "com.awiskartech.food_app_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "22021596052-k5219o0v239621i48qst2d3r2a6q15vf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD70CoxEICnlp38hUSpddcqkoeAMFQwte8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "22021596052-k5219o0v239621i48qst2d3r2a6q15vf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
