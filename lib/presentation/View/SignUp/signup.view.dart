@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/presentation/View/SignUp/components/signup_authprovider.dart';
 import 'package:food_app/widgets/filled_btn.widget.dart';
+import 'package:provider/provider.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({Key? key}) : super(key: key);
@@ -11,8 +13,15 @@ class SignUpView extends StatefulWidget {
 class _SignUpViewState extends State<SignUpView> {
   bool _isVisible = true;
 
+  TextEditingController _fullName = TextEditingController();
+  TextEditingController _email = TextEditingController();
+  TextEditingController _password = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
+    SignupAuthProvider signupAuthProvider =
+        Provider.of<SignupAuthProvider>(context);
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -30,16 +39,19 @@ class _SignUpViewState extends State<SignUpView> {
               Column(
                 children: [
                   TextFormField(
+                    controller: _fullName,
                     decoration: InputDecoration(
                       labelText: "Full Name",
                     ),
                   ),
                   TextFormField(
+                    controller: _email,
                     decoration: InputDecoration(
                       labelText: "Email",
                     ),
                   ),
                   TextFormField(
+                    controller: _password,
                     obscureText: _isVisible,
                     decoration: InputDecoration(
                       labelText: "Password",
@@ -62,7 +74,14 @@ class _SignUpViewState extends State<SignUpView> {
                 children: [
                   FilledButtonWidget(
                     btnName: "Register",
-                    onPressed: () {},
+                    onPressed: () {
+                      signupAuthProvider.signupValidation(
+                        context: context,
+                        fullName: _fullName,
+                        emailAddress: _email,
+                        password: _password,
+                      );
+                    },
                   ),
                   SizedBox(
                     height: 20.0,
