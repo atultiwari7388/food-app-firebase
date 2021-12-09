@@ -9,6 +9,8 @@ class SignupAuthProvider extends ChangeNotifier {
 
   UserCredential? _userCredential;
 
+  bool isLoading = false;
+
   void signupValidation({
     required TextEditingController? fullName,
     required TextEditingController? emailAddress,
@@ -57,26 +59,53 @@ class SignupAuthProvider extends ChangeNotifier {
       return;
     } else {
       try {
+        isLoading = true;
+        notifyListeners();
+
         _userCredential =
             await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailAddress.text,
           password: password.text,
         );
 
+        isLoading = true;
+        notifyListeners();
+
         FirebaseFirestore.instance
             .collection("users")
             .doc(_userCredential!.user!.uid)
             .set(
           {
-            "FullName": fullName,
-            "emailAddress": emailAddress,
-            "password": password,
+            "FullName": fullName.text,
+            "emailAddress": emailAddress.text,
+            "password": password.text,
             "userUid": _userCredential!.user!.uid,
           },
-        ).then(
-          (value) => Navigator.pushNamed(context, "/"),
-        );
-      } catch (e) {}
+        ).then((value) {
+          isLoading = false;
+          notifyListeners();
+          Navigator.pushNamed(context, "/");
+        });
+      } on FirebaseAuthException catch (e) {
+        isLoading = false;
+        notifyListeners();
+
+        if (e.code == "weak-password") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Weak Password"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (e.code == "email-already-in-use") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Email already exists"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     }
   }
 }

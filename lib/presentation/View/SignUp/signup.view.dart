@@ -84,17 +84,21 @@ class _SignUpViewState extends State<SignUpView> {
               SizedBox(height: 20),
               Column(
                 children: [
-                  FilledButtonWidget(
-                    btnName: "Register",
-                    onPressed: () {
-                      signupAuthProvider.signupValidation(
-                        context: context,
-                        fullName: _fullName,
-                        emailAddress: _email,
-                        password: _password,
-                      );
-                    },
-                  ),
+                  signupAuthProvider.isLoading == false
+                      ? FilledButtonWidget(
+                          btnName: "Register",
+                          onPressed: () {
+                            signupAuthProvider.signupValidation(
+                              context: context,
+                              fullName: _fullName,
+                              emailAddress: _email,
+                              password: _password,
+                            );
+                          },
+                        )
+                      : Center(
+                          child: CircularProgressIndicator(),
+                        ),
                   SizedBox(
                     height: 20.0,
                   ),
