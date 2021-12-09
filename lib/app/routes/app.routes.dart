@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/presentation/View/Home/home.view.dart';
 import 'package:food_app/presentation/View/SignIn/signin.view.dart';
 import 'package:food_app/presentation/View/SignUp/signup.view.dart';
 import 'package:food_app/presentation/View/Welcome/welcome.view.dart';
@@ -7,6 +7,12 @@ import 'package:food_app/presentation/View/Welcome/welcome.view.dart';
 class AppRoutes {
   static Route? generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case "/":
+        {
+          return MaterialPageRoute(
+            builder: (context) => HomeView(),
+          );
+        }
       case '/welcome':
         {
           return MaterialPageRoute(

@@ -1,10 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignupAuthProvider extends ChangeNotifier {
   static String Pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
   RegExp _regExp = RegExp(Pattern);
+
+  UserCredential? _userCredential;
+
+  bool isLoading = false;
 
   void signupValidation({
     required TextEditingController? fullName,
@@ -52,6 +57,55 @@ class SignupAuthProvider extends ChangeNotifier {
         ),
       );
       return;
+    } else {
+      try {
+        isLoading = true;
+        notifyListeners();
+
+        _userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailAddress.text,
+          password: password.text,
+        );
+
+        isLoading = true;
+        notifyListeners();
+
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(_userCredential!.user!.uid)
+            .set(
+          {
+            "FullName": fullName.text,
+            "emailAddress": emailAddress.text,
+            "password": password.text,
+            "userUid": _userCredential!.user!.uid,
+          },
+        ).then((value) {
+          isLoading = false;
+          notifyListeners();
+          Navigator.pushNamed(context, "/");
+        });
+      } on FirebaseAuthException catch (e) {
+        isLoading = false;
+        notifyListeners();
+
+        if (e.code == "weak-password") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Weak Password"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else if (e.code == "email-already-in-use") {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Email already exists"),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
     }
   }
 }

@@ -41,12 +41,22 @@ class _SignUpViewState extends State<SignUpView> {
                   TextFormField(
                     controller: _fullName,
                     decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.person_outline,
+                        size: 30,
+                        color: Colors.green,
+                      ),
                       labelText: "Full Name",
                     ),
                   ),
                   TextFormField(
                     controller: _email,
                     decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.email,
+                        size: 30,
+                        color: Colors.green,
+                      ),
                       labelText: "Email",
                     ),
                   ),
@@ -54,6 +64,8 @@ class _SignUpViewState extends State<SignUpView> {
                     controller: _password,
                     obscureText: _isVisible,
                     decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.lock_outline,
+                          size: 30, color: Colors.green),
                       labelText: "Password",
                       suffixIcon: IconButton(
                         onPressed: () {
@@ -72,17 +84,21 @@ class _SignUpViewState extends State<SignUpView> {
               SizedBox(height: 20),
               Column(
                 children: [
-                  FilledButtonWidget(
-                    btnName: "Register",
-                    onPressed: () {
-                      signupAuthProvider.signupValidation(
-                        context: context,
-                        fullName: _fullName,
-                        emailAddress: _email,
-                        password: _password,
-                      );
-                    },
-                  ),
+                  signupAuthProvider.isLoading == false
+                      ? FilledButtonWidget(
+                          btnName: "Register",
+                          onPressed: () {
+                            signupAuthProvider.signupValidation(
+                              context: context,
+                              fullName: _fullName,
+                              emailAddress: _email,
+                              password: _password,
+                            );
+                          },
+                        )
+                      : Center(
+                          child: CircularProgressIndicator(),
+                        ),
                   SizedBox(
                     height: 20.0,
                   ),
