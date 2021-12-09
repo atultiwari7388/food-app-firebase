@@ -1,31 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class SignupAuthProvider extends ChangeNotifier {
+class SignInAuthProvider extends ChangeNotifier {
   static String Pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
   RegExp _regExp = RegExp(Pattern);
 
-  UserCredential? _userCredential;
-
   bool isLoading = false;
 
-  void signupValidation({
-    required TextEditingController? fullName,
+  UserCredential? userCredential;
+
+  void signinValidation({
     required TextEditingController? emailAddress,
     required TextEditingController? password,
     required BuildContext context,
   }) async {
-    if (fullName!.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Full Name is required'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return;
-    } else if (emailAddress!.text.trim().isEmpty) {
+    if (emailAddress!.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Email Address is required'),
@@ -33,80 +23,80 @@ class SignupAuthProvider extends ChangeNotifier {
         ),
       );
       return;
-    } else if (!_regExp.hasMatch(emailAddress.text.trim())) {
+    } else if (!_regExp.hasMatch(emailAddress.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Invalid Email Address'),
+          content: Text('Email Address is invalid'),
           backgroundColor: Colors.red,
         ),
       );
       return;
-    } else if (password!.text.trim().isEmpty) {
+    } else if (password!.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Password Should be at least 8 characters'),
+          content: Text('Password is required'),
           backgroundColor: Colors.red,
         ),
       );
       return;
-    } else if (password.text.trim().length < 8) {
+    } else if (password.text.length < 8) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Password Should be at least 8 characters'),
+          content: Text('Password must be at least 8 characters'),
           backgroundColor: Colors.red,
         ),
       );
-      return;
     } else {
       try {
         isLoading = true;
         notifyListeners();
 
-        _userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        userCredential = await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
           email: emailAddress.text,
           password: password.text,
-        );
-
-        isLoading = true;
-        notifyListeners();
-
-        FirebaseFirestore.instance
-            .collection("users")
-            .doc(_userCredential!.user!.uid)
-            .set(
-          {
-            "FullName": fullName.text,
-            "emailAddress": emailAddress.text,
-            "password": password.text,
-            "userUid": _userCredential!.user!.uid,
-          },
-        ).then((value) async {
+        )
+            .catchError((error) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(error.message),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }).then((value) async {
           isLoading = false;
           notifyListeners();
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Your Account has been created successfully'),
+              content: Text('Successfully signed in'),
               backgroundColor: Colors.green,
             ),
           );
-          await Navigator.pushNamed(context, "/");
+          await Navigator.of(context).pushReplacementNamed('/');
+          notifyListeners();
         });
-      } on FirebaseAuthException catch (e) {
+      } on FirebaseException catch (e) {
         isLoading = false;
         notifyListeners();
 
-        if (e.code == "weak-password") {
+        if (e.code == "user-not-found") {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Weak Password"),
+              content: Text('User not found'),
               backgroundColor: Colors.red,
             ),
           );
-        } else if (e.code == "email-already-in-use") {
+        } else if (e.code == "wrong-password") {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Email already exists"),
+              content: Text('Wrong password'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Something went wrong'),
               backgroundColor: Colors.red,
             ),
           );

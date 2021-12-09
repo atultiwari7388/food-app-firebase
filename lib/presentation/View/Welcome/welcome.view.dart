@@ -21,8 +21,8 @@ class WelcomeView extends StatelessWidget {
             ),
             //Bottom Section
             FilledButtonWidget(
-              btnName: 'LogIn',
-              onPressed: () {},
+              btnName: 'SignIn',
+              onPressed: () => Navigator.pushNamed(context, '/signin'),
             ),
             OutlineButtonWidget(
               btnName: 'SignUp',
