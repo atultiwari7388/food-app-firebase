@@ -1,10 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignupAuthProvider extends ChangeNotifier {
   static String Pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
   RegExp _regExp = RegExp(Pattern);
+
+  UserCredential? _userCredential;
 
   void signupValidation({
     required TextEditingController? fullName,
@@ -52,6 +55,28 @@ class SignupAuthProvider extends ChangeNotifier {
         ),
       );
       return;
+    } else {
+      try {
+        _userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailAddress.text,
+          password: password.text,
+        );
+
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(_userCredential!.user!.uid)
+            .set(
+          {
+            "FullName": fullName,
+            "emailAddress": emailAddress,
+            "password": password,
+            "userUid": _userCredential!.user!.uid,
+          },
+        ).then(
+          (value) => Navigator.pushNamed(context, "/"),
+        );
+      } catch (e) {}
     }
   }
 }
