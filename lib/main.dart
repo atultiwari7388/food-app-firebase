@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: "/welcome",
+        initialRoute: "/loggedin",
         onGenerateRoute: AppRoutes.generateRoute,
       ),
     );
