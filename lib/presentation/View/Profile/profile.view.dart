@@ -2,8 +2,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/presentation/View/Home/home.view.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
+  bool isEdit = false;
+
+  TextEditingController _fullName = TextEditingController();
+  TextEditingController _email = TextEditingController();
+
+  Widget textFromField({required String hintText}) {
+    return Container(
+      child: Text(
+        hintText,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: 20.0,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +52,7 @@ class ProfileView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            SizedBox(height: 20),
             Container(
               child: Column(
                 children: [
@@ -43,30 +67,8 @@ class ProfileView extends StatelessWidget {
             Container(
               child: Column(
                 children: [
-                  Text(
-                    userModel.fullName!,
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontSize: 25.0,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    userModel.emailAddress!,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                  Text(
-                    "+91-6307537145",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
+                  textFromField(hintText: userModel.fullName!),
+                  textFromField(hintText: userModel.emailAddress!),
                   SizedBox(height: 30),
                 ],
               ),
