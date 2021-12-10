@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/app/routes/app.routes.dart';
+import 'package:food_app/presentation/View/SignIn/components/signin_authprovider.dart';
 import 'package:food_app/presentation/View/SignUp/components/signup_authprovider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => SignupAuthProvider()),
+        ChangeNotifierProvider(create: (context) => SignInAuthProvider()),
       ],
       child: MaterialApp(
         title: 'Food App',
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
         ),
         debugShowCheckedModeBanner: false,
-        initialRoute: "/welcome",
+        initialRoute: "/loggedin",
         onGenerateRoute: AppRoutes.generateRoute,
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/presentation/View/Home/home.view.dart';
+import 'package:food_app/presentation/View/LoggedIn/logged_in.view.dart';
+import 'package:food_app/presentation/View/Profile/profile.view.dart';
 import 'package:food_app/presentation/View/SignIn/signin.view.dart';
 import 'package:food_app/presentation/View/SignUp/signup.view.dart';
 import 'package:food_app/presentation/View/Welcome/welcome.view.dart';
@@ -29,6 +31,18 @@ class AppRoutes {
         {
           return MaterialPageRoute(
             builder: (context) => SignInView(),
+          );
+        }
+      case "/loggedin":
+        {
+          return MaterialPageRoute(
+            builder: (context) => LoggedInView(),
+          );
+        }
+      case "/profile":
+        {
+          return MaterialPageRoute(
+            builder: (context) => ProfileView(),
           );
         }
     }

@@ -81,7 +81,6 @@ class _SignUpViewState extends State<SignUpView> {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
               Column(
                 children: [
                   signupAuthProvider.isLoading == false
