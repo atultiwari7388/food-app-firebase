@@ -49,7 +49,8 @@ class CustomDrawer extends StatelessWidget {
                       child: ClipOval(
                         child: Image(
                           image: NetworkImage(
-                              "https://scontent.fbbi5-1.fna.fbcdn.net/v/t39.30808-6/256320539_287960583239367_3515810905931329717_n.jpg?_nc_cat=100&ccb=1-5&_nc_sid=730e14&_nc_ohc=OGcM8hdI1l8AX8Hen6R&_nc_ht=scontent.fbbi5-1.fna&oh=ccf66147ee484794f0ee859ea4087090&oe=61B6BF53"),
+                            userModel.userImage!,
+                          ),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -70,7 +71,10 @@ class CustomDrawer extends StatelessWidget {
             ],
           ),
           _buildDrawerOption(
-              Icon(Icons.account_circle), "Your Profile", () => null),
+            Icon(Icons.account_circle),
+            "Your Profile",
+            () => Navigator.pushNamed(context, "/profile"),
+          ),
           _buildDrawerOption(
               Icon(Icons.favorite_border), "Favorite", () => null),
           _buildDrawerOption(

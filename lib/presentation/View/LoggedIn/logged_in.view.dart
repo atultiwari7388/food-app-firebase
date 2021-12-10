@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/presentation/View/Home/home.view.dart';
+import 'package:food_app/custom/tabs_screen.dart';
 import 'package:food_app/presentation/View/Welcome/welcome.view.dart';
 
 class LoggedInView extends StatelessWidget {
@@ -17,7 +17,7 @@ class LoggedInView extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (snapShot.hasData) {
-            return HomeView();
+            return TabsScreen();
           } else if (snapShot.hasError) {
             return Text("Error");
           } else {

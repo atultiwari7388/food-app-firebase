@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/models/user_model.dart';
 import 'package:food_app/presentation/View/Home/Components/card_section.dart';
-import 'package:food_app/widgets/drawer.dart';
 
 late UserModel userModel;
 
@@ -39,34 +38,16 @@ class _HomeViewState extends State<HomeView> {
     getCurrentUserData();
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         title: Text('Explore'),
       ),
-      drawer: CustomDrawer(),
       body: ListView(
         physics: BouncingScrollPhysics(),
         children: [
           SizedBox(height: 20),
           CardSection(),
           SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.all(14.0),
-            child: Material(
-              borderRadius: BorderRadius.circular(10),
-              elevation: 3,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  hintText: "Search for food",
-                  fillColor: Colors.white,
-                  prefixIcon: Icon(Icons.search),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-            ),
-          ),
           ListTile(
             leading: Text(
               "Categories",
