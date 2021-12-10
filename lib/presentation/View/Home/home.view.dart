@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/widgets/drawer.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -9,23 +9,9 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        automaticallyImplyLeading: false,
         title: Text('Home'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              FirebaseAuth.instance.signOut().then(
-                    (value) => Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      "/welcome",
-                      (route) => false,
-                    ),
-                  );
-            },
-            icon: Icon(Icons.exit_to_app_outlined),
-          ),
-        ],
       ),
+      drawer: CustomDrawer(),
       body: Center(
         child: Text('Home'),
       ),
