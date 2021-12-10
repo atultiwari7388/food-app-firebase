@@ -58,34 +58,39 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                Categories(
-                  categoryName: "Pizza",
-                  categoryImage:
-                      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse2.mm.bing.net%2Fth%3Fid%3DOIP.uXiVr7b9UfFVgcqJUWhDjwHaE8%26pid%3DApi&f=1",
-                ),
-                Categories(
-                  categoryName: "Burger",
-                  categoryImage:
-                      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fcmx.weightwatchers.com%2Fassets-proxy%2Fweight-watchers%2Fimage%2Fupload%2Fv1594406683%2Fvisitor-site%2Fprod%2Fca%2Fburgers_mobile_my18jv&f=1&nofb=1",
-                ),
-                Categories(
-                  categoryName: "Kurkure",
-                  categoryImage:
-                      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fmedia.naheed.pk%2Fcatalog%2Fproduct%2Fcache%2F49dcd5d85f0fa4d590e132d0368d8132%2F1%2F1%2F1138846-1.jpg&f=1&nofb=1",
-                ),
-                Categories(
-                  categoryName: "Pepsi",
-                  categoryImage:
-                      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdehayf5mhw1h7.cloudfront.net%2Fwp-content%2Fuploads%2Fsites%2F114%2F2017%2F03%2F22172858%2Fshutterstock_603255458.jpg&f=1&nofb=1",
-                )
-              ],
+
+          // get category data
+
+          Container(
+            height: 100,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("categories")
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                if (!streamSnapshot.hasData) {
+                  return Center(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: streamSnapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return Categories(
+                      categoryName: streamSnapshot.data!.docs[index]
+                          ["categoryName"],
+                      categoryImage: streamSnapshot.data!.docs[index]
+                          ["categoryImage"],
+                    );
+                  },
+                );
+              },
             ),
           ),
+
           ListTile(
             leading: Text(
               "Popular Brands",
