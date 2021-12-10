@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/presentation/View/Home/home.view.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -55,7 +56,7 @@ class CustomDrawer extends StatelessWidget {
                     ),
                     SizedBox(width: 7.0),
                     Text(
-                      "Atul Tiwari",
+                      userModel.fullName!,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,
@@ -79,17 +80,18 @@ class CustomDrawer extends StatelessWidget {
             child: Align(
               alignment: FractionalOffset.bottomCenter,
               child: _buildDrawerOption(
-                  Icon(Icons.exit_to_app_outlined),
-                  "Logout",
-                  () => {
-                        FirebaseAuth.instance.signOut().then(
-                              (value) => Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                "/welcome",
-                                (route) => false,
-                              ),
-                            ),
-                      }),
+                Icon(Icons.exit_to_app_outlined),
+                "Logout",
+                () => {
+                  FirebaseAuth.instance.signOut().then(
+                        (value) => Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          "/welcome",
+                          (route) => false,
+                        ),
+                      ),
+                },
+              ),
             ),
           ),
         ],
