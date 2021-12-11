@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:food_app/models/user_model.dart';
 import 'package:food_app/presentation/View/Home/Components/card_section.dart';
 
-late UserModel userModel;
+UserModel? userModel;
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -80,6 +80,9 @@ class _HomeViewState extends State<HomeView> {
                   itemCount: streamSnapshot.data!.docs.length,
                   itemBuilder: (context, index) {
                     return Categories(
+                      onTap: () {
+                        print(streamSnapshot.data!.docs[index]["categoryName"]);
+                      },
                       categoryName: streamSnapshot.data!.docs[index]
                           ["categoryName"],
                       categoryImage: streamSnapshot.data!.docs[index]
@@ -210,29 +213,34 @@ class Categories extends StatelessWidget {
     Key? key,
     required this.categoryName,
     required this.categoryImage,
+    required this.onTap,
   }) : super(key: key);
 
   final String? categoryName;
   final String? categoryImage;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(12.0),
-      height: 100,
-      width: 140,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: NetworkImage(categoryImage!), fit: BoxFit.cover),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Center(
-        child: Text(
-          categoryName!,
-          style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.all(12.0),
+        height: 100,
+        width: 140,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+              image: NetworkImage(categoryImage!), fit: BoxFit.cover),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Center(
+          child: Text(
+            categoryName!,
+            style: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
       ),
