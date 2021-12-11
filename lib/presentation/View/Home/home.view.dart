@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/models/user_model.dart';
 import 'package:food_app/presentation/View/Home/Components/card_section.dart';
+import 'package:food_app/widgets/grid_view.widget.dart';
 
 UserModel? userModel;
 
@@ -81,7 +82,16 @@ class _HomeViewState extends State<HomeView> {
                   itemBuilder: (context, index) {
                     return Categories(
                       onTap: () {
-                        print(streamSnapshot.data!.docs[index]["categoryName"]);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GridViewWidget(
+                              collection: streamSnapshot.data!.docs[index]
+                                  ["categoryName"],
+                              id: streamSnapshot.data!.docs[index].id,
+                            ),
+                          ),
+                        );
                       },
                       categoryName: streamSnapshot.data!.docs[index]
                           ["categoryName"],
