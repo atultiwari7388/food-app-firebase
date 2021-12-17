@@ -12,7 +12,7 @@ class SingleProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           margin: EdgeInsets.all(12.0),
@@ -24,22 +24,21 @@ class SingleProductWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(18.0),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(left: 25.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "\₹$price",
-                style: TextStyle(fontWeight: FontWeight.normal),
-              ),
-              SizedBox(height: 5),
-              Text(
-                name,
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-            ],
-          ),
+        Row(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              name,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.0),
+            ),
+            SizedBox(width: 10),
+            Text(
+              "\₹$price",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
         ),
       ],
     );

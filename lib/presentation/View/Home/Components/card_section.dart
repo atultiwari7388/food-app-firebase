@@ -66,7 +66,7 @@ class CardSection extends StatelessWidget {
                 ),
                 SizedBox(height: 6.0),
                 Text(
-                  "On all vegetable and foods",
+                  "On Your Next Order",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 17.0,

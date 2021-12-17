@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:food_app/presentation/View/Cart/cart.view.dart';
 import 'package:food_app/presentation/View/Home/home.view.dart';
 import 'package:food_app/presentation/View/Profile/profile.view.dart';
@@ -35,22 +36,24 @@ class _TabsScreenState extends State<TabsScreen> {
         onTap: (index) => setState(() => currentIndex = index),
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(currentIndex == 0 ? IconlyBold.home : IconlyLight.home),
             label: "Home",
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.search),
+            icon: Icon(
+                currentIndex == 1 ? IconlyBold.search : IconlyLight.search),
             label: "Search",
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart_outlined),
+            icon: Icon(currentIndex == 2 ? IconlyBold.buy : IconlyLight.buy),
             label: "Cart",
             backgroundColor: Colors.blue,
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(
+                currentIndex == 3 ? IconlyBold.profile : IconlyLight.profile),
             label: "Profile",
             backgroundColor: Colors.blue,
           ),
