@@ -71,8 +71,8 @@ class _HomeViewState extends State<HomeView> {
               builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                 if (!streamSnapshot.hasData) {
                   return Center(
-                    child: Center(
-                      child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.green,
                     ),
                   );
                 }
@@ -114,38 +114,72 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
-          SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                PopularBrands(
-                  brandsImage:
-                      "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fbolognapac.com%2Fwp-content%2Fuploads%2F2013%2F03%2Fdominos-logo.jpg&f=1&nofb=1",
-                  brandsName: "Dominos",
-                  brandsPrice: "30 mins",
-                ),
-                PopularBrands(
-                  brandsImage:
-                      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.dontwasteyourmoney.com%2Fwp-content%2Fuploads%2F2017%2F07%2F807807014_sandwich-subway.jpg&f=1&nofb=1",
-                  brandsName: "Subway",
-                  brandsPrice: "30 mins",
-                ),
-                PopularBrands(
-                  brandsImage:
-                      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.etimg.com%2Fthumb%2Fmsid-65851090%2Cwidth-300%2Cimgsize-129835%2Cresizemode-4%2Ffaasos.jpg&f=1&nofb=1",
-                  brandsName: "Fasoos",
-                  brandsPrice: "30 mins",
-                ),
-                PopularBrands(
-                  brandsImage:
-                      "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fheavy.com%2Fwp-content%2Fuploads%2F2019%2F02%2Fpizza-hut-e1549119164344.jpg%3Fresize%3D2048&f=1&nofb=1",
-                  brandsName: "Pizza Hut",
-                  brandsPrice: "30 mins",
-                ),
-              ],
-            ),
+
+          Container(
+            height: 200,
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("popularBrands")
+                    .snapshots(),
+                builder:
+                    (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                  if (!streamSnapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  }
+
+                  return ListView.builder(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.horizontal,
+                    itemCount: streamSnapshot.data!.docs.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      var data = streamSnapshot.data!.docs[index];
+                      return PopularBrands(
+                        brandsImage: data["popularImage"],
+                        brandsName: data["popularName"],
+                        brandsTiming: data["popularTiming"],
+                      );
+                    },
+                  );
+                }),
           ),
+
+          // SingleChildScrollView(
+          //   physics: BouncingScrollPhysics(),
+          //   scrollDirection: Axis.horizontal,
+          //   child: Row(
+          //     children: [
+          //       PopularBrands(
+          //         brandsImage:
+          //             "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fbolognapac.com%2Fwp-content%2Fuploads%2F2013%2F03%2Fdominos-logo.jpg&f=1&nofb=1",
+          //         brandsName: "Dominos",
+          //         brandsTiming: "30 mins",
+          //       ),
+          //       PopularBrands(
+          //         brandsImage:
+          //             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.dontwasteyourmoney.com%2Fwp-content%2Fuploads%2F2017%2F07%2F807807014_sandwich-subway.jpg&f=1&nofb=1",
+          //         brandsName: "Subway",
+          //         brandsTiming: "30 mins",
+          //       ),
+          //       PopularBrands(
+          //         brandsImage:
+          //             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.etimg.com%2Fthumb%2Fmsid-65851090%2Cwidth-300%2Cimgsize-129835%2Cresizemode-4%2Ffaasos.jpg&f=1&nofb=1",
+          //         brandsName: "Fasoos",
+          //         brandsTiming: "30 mins",
+          //       ),
+          //       PopularBrands(
+          //         brandsImage:
+          //             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fheavy.com%2Fwp-content%2Fuploads%2F2019%2F02%2Fpizza-hut-e1549119164344.jpg%3Fresize%3D2048&f=1&nofb=1",
+          //         brandsName: "Pizza Hut",
+          //         brandsTiming: "30 mins",
+          //       ),
+          //     ],
+          //   ),
+          // ),
+
           SizedBox(height: 100),
         ],
       ),
@@ -158,12 +192,12 @@ class PopularBrands extends StatelessWidget {
     Key? key,
     required this.brandsImage,
     required this.brandsName,
-    required this.brandsPrice,
+    required this.brandsTiming,
   }) : super(key: key);
 
   final String? brandsImage;
   final String? brandsName;
-  final String? brandsPrice;
+  final String? brandsTiming;
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +240,7 @@ class PopularBrands extends StatelessWidget {
           ),
           SizedBox(height: 10),
           Text(
-            brandsPrice!,
+            "$brandsTiming min",
             style: TextStyle(
               fontWeight: FontWeight.w300,
               color: Colors.grey,
