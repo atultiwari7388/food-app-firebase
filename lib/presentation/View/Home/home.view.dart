@@ -116,7 +116,7 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
 
-// get popular product data
+          // get popular product data
           Container(
             height: 180,
             child: StreamBuilder(
@@ -170,7 +170,7 @@ class _HomeViewState extends State<HomeView> {
               builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                 if (!streamSnapshot.hasData) {
                   return Center(
-                    child: CircularProgressIndicator(
+                    child: LinearProgressIndicator(
                       backgroundColor: Colors.green,
                     ),
                   );
