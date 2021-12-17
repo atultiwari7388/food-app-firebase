@@ -66,12 +66,7 @@ class SignInAuthProvider extends ChangeNotifier {
         }).then((value) async {
           isLoading = false;
           notifyListeners();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Successfully signed in'),
-              backgroundColor: Colors.green,
-            ),
-          );
+          Text("Successfully Logged in");
           await Navigator.of(context).pushReplacementNamed('/');
           notifyListeners();
         });

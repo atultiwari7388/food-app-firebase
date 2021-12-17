@@ -48,16 +48,14 @@ class CustomDrawer extends StatelessWidget {
                       ),
                       child: ClipOval(
                         child: Image(
-                          image: NetworkImage(
-                            userModel!.userImage!,
-                          ),
+                          image: AssetImage("assets/logo.png"),
                           fit: BoxFit.cover,
                         ),
                       ),
                     ),
                     SizedBox(width: 7.0),
                     Text(
-                      userModel!.fullName!,
+                      userModel!.fullName,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,

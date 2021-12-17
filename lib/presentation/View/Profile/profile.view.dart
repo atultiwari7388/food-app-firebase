@@ -55,7 +55,8 @@ class _ProfileViewState extends State<ProfileView> {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage(userModel!.userImage!),
+                    backgroundColor: Colors.white,
+                    backgroundImage: AssetImage("assets/logo.png"),
                   ),
                 ],
               ),
@@ -64,8 +65,8 @@ class _ProfileViewState extends State<ProfileView> {
             Container(
               child: Column(
                 children: [
-                  textFromField(hintText: userModel!.fullName!),
-                  textFromField(hintText: userModel!.emailAddress!),
+                  textFromField(hintText: userModel!.fullName),
+                  textFromField(hintText: userModel!.emailAddress),
                   SizedBox(height: 30),
                 ],
               ),
