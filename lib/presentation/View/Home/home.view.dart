@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:food_app/models/user_model.dart';
 import 'package:food_app/presentation/View/Home/Components/card_section.dart';
 import 'package:food_app/widgets/grid_view.widget.dart';
+import 'package:food_app/widgets/single_product.widget.dart';
 
 UserModel? userModel;
 
@@ -115,8 +116,9 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
 
+// get popular product data
           Container(
-            height: 200,
+            height: 180,
             child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("popularBrands")
@@ -147,38 +149,46 @@ class _HomeViewState extends State<HomeView> {
                 }),
           ),
 
-          // SingleChildScrollView(
-          //   physics: BouncingScrollPhysics(),
-          //   scrollDirection: Axis.horizontal,
-          //   child: Row(
-          //     children: [
-          //       PopularBrands(
-          //         brandsImage:
-          //             "https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fbolognapac.com%2Fwp-content%2Fuploads%2F2013%2F03%2Fdominos-logo.jpg&f=1&nofb=1",
-          //         brandsName: "Dominos",
-          //         brandsTiming: "30 mins",
-          //       ),
-          //       PopularBrands(
-          //         brandsImage:
-          //             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.dontwasteyourmoney.com%2Fwp-content%2Fuploads%2F2017%2F07%2F807807014_sandwich-subway.jpg&f=1&nofb=1",
-          //         brandsName: "Subway",
-          //         brandsTiming: "30 mins",
-          //       ),
-          //       PopularBrands(
-          //         brandsImage:
-          //             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fimg.etimg.com%2Fthumb%2Fmsid-65851090%2Cwidth-300%2Cimgsize-129835%2Cresizemode-4%2Ffaasos.jpg&f=1&nofb=1",
-          //         brandsName: "Fasoos",
-          //         brandsTiming: "30 mins",
-          //       ),
-          //       PopularBrands(
-          //         brandsImage:
-          //             "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fheavy.com%2Fwp-content%2Fuploads%2F2019%2F02%2Fpizza-hut-e1549119164344.jpg%3Fresize%3D2048&f=1&nofb=1",
-          //         brandsName: "Pizza Hut",
-          //         brandsTiming: "30 mins",
-          //       ),
-          //     ],
-          //   ),
-          // ),
+          ListTile(
+            leading: Text(
+              "Picked For You",
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ),
+
+          // get picked for you data
+
+          Container(
+            height: 280,
+            child: StreamBuilder(
+              stream:
+                  FirebaseFirestore.instance.collection("products").snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                if (!streamSnapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: streamSnapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return SingleProductWidget(
+                      name: streamSnapshot.data!.docs[index]["productName"],
+                      image: streamSnapshot.data!.docs[index]["productImage"],
+                      price: streamSnapshot.data!.docs[index]["productPrice"],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
 
           SizedBox(height: 100),
         ],

@@ -21,6 +21,15 @@ class GridViewWidget extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          collection!.toUpperCase(),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.3,
+          ),
+        ),
       ),
       body: FutureBuilder(
         future: FirebaseFirestore.instance
@@ -35,47 +44,28 @@ class GridViewWidget extends StatelessWidget {
             );
           }
 
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: Material(
-                  borderRadius: BorderRadius.circular(10),
-                  elevation: 3,
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: "Search for food",
-                      fillColor: Colors.white,
-                      prefixIcon: Icon(Icons.search),
-                      filled: true,
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              GridView.builder(
-                shrinkWrap: true,
-                // itemCount: snapshot.data?.docs.length ?? 0,
-                itemCount: snapshot.data!.docs.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 0.4,
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 20,
-                  crossAxisSpacing: 20,
-                ),
-                itemBuilder: (context, index) {
-                  var data = snapshot.data!.docs[index];
-                  return SingleProductWidget(
-                    image: data["productImage"],
-                    name: data["productName"],
-                    price: data["productPrice"],
-                  );
-                },
-              ),
-            ],
+          return GridView.builder(
+            physics: BouncingScrollPhysics(),
+            // scrollDirection: Axis.vertical,
+            // shrinkWrap: true,
+            // itemCount: snapshot.data?.docs.length ?? 0,
+            itemCount: snapshot.data!.docs.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              childAspectRatio: 0.7,
+              crossAxisCount: 2,
+              mainAxisSpacing: 1,
+              crossAxisSpacing: 1,
+            ),
+            itemBuilder: (context, index) {
+              var data = snapshot.data!.docs[index];
+              return SingleProductWidget(
+                image: data["productImage"],
+                name: data["productName"],
+                price: data["productPrice"],
+              );
+            },
+
+            // SizedBox(height: 200),
           );
         },
       ),
