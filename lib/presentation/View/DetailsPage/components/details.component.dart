@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/presentation/View/Cart/cart.view.dart';
 
 class DetailsComponent extends StatelessWidget {
   const DetailsComponent({
@@ -8,6 +11,8 @@ class DetailsComponent extends StatelessWidget {
     required this.productOldPrice,
     required this.productPrice,
     required this.productRating,
+    required this.productId,
+    required this.productImage,
   }) : super(key: key);
 
   final String productName;
@@ -15,7 +20,8 @@ class DetailsComponent extends StatelessWidget {
   final double productOldPrice;
   final double productPrice;
   final double productRating;
-
+  final String productId;
+  final String productImage;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -65,7 +71,27 @@ class DetailsComponent extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  FirebaseFirestore.instance
+                      .collection("cart")
+                      .doc(FirebaseAuth.instance.currentUser!.uid)
+                      .collection("userCart")
+                      .doc(productId)
+                      .set({
+                    "productId": productId,
+                    "productName": productName,
+                    "productImage": productImage,
+                    "productPrice": productPrice,
+                    "productDescription": productDescription,
+                    "productQuantity": 1,
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartView(),
+                    ),
+                  );
+                },
                 child: Text(
                   "Add to Cart",
                   style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w600),
