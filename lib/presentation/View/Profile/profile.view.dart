@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:food_app/presentation/View/Home/home.view.dart';
 
 class ProfileView extends StatefulWidget {
@@ -77,7 +78,7 @@ class _ProfileViewState extends State<ProfileView> {
                 elevation: 0,
                 child: ListTile(
                   leading: Icon(
-                    Icons.favorite_border,
+                    IconlyBold.heart,
                     color: Theme.of(context).primaryColor,
                   ),
                   trailing: IconButton(
@@ -104,7 +105,7 @@ class _ProfileViewState extends State<ProfileView> {
                 elevation: 0,
                 child: ListTile(
                   leading: Icon(
-                    Icons.shopping_cart_outlined,
+                    IconlyBold.buy,
                     color: Theme.of(context).primaryColor,
                   ),
                   trailing: IconButton(
@@ -131,7 +132,7 @@ class _ProfileViewState extends State<ProfileView> {
                 elevation: 0,
                 child: ListTile(
                   leading: Icon(
-                    Icons.badge_sharp,
+                    IconlyBold.bag,
                     color: Theme.of(context).primaryColor,
                   ),
                   trailing: IconButton(
@@ -157,7 +158,7 @@ class _ProfileViewState extends State<ProfileView> {
               child: Row(
                 children: [
                   Icon(
-                    Icons.login_outlined,
+                    IconlyBold.logout,
                     size: 30,
                     color: Color(0xffDB1B18),
                   ),

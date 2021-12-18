@@ -5,6 +5,7 @@ import 'package:food_app/models/user_model.dart';
 import 'package:food_app/presentation/View/Home/Components/card_section.dart';
 import 'package:food_app/widgets/grid_view.widget.dart';
 import 'package:food_app/widgets/single_product.widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 UserModel? userModel;
 
@@ -116,7 +117,7 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
 
-// get popular product data
+          // get popular product data
           Container(
             height: 180,
             child: StreamBuilder(
@@ -163,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
           // get picked for you data
 
           Container(
-            height: 280,
+            height: 260,
             child: StreamBuilder(
               stream:
                   FirebaseFirestore.instance.collection("products").snapshots(),
@@ -175,6 +176,51 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   );
                 }
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: streamSnapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return SingleProductWidget(
+                      name: streamSnapshot.data!.docs[index]["productName"],
+                      image: streamSnapshot.data!.docs[index]["productImage"],
+                      price: streamSnapshot.data!.docs[index]["productPrice"],
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+
+          ListTile(
+            leading: Text(
+              "Best Rating",
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
+          ),
+
+          // get best selling product
+
+          Container(
+            height: 260,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("products")
+                  .where("productRating", isGreaterThan: 3.5)
+                  .orderBy("productRating", descending: true)
+                  .snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                if (!streamSnapshot.hasData) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                }
+
                 return ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: streamSnapshot.data!.docs.length,
