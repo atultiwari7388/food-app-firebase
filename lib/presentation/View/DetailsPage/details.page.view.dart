@@ -6,6 +6,7 @@ import 'package:food_app/presentation/View/DetailsPage/components/top.component.
 class DetailsPage extends StatelessWidget {
   const DetailsPage({
     Key? key,
+    required this.productId,
     required this.productName,
     required this.productImage,
     required this.productDescription,
@@ -14,6 +15,7 @@ class DetailsPage extends StatelessWidget {
     required this.productRating,
   }) : super(key: key);
 
+  final String productId;
   final String productImage;
   final String productName;
   final String productDescription;
@@ -38,9 +40,11 @@ class DetailsPage extends StatelessWidget {
             DetailsComponent(
               productDescription: productDescription,
               productName: productName,
+              productImage: productImage,
               productOldPrice: productOldPrice,
               productPrice: productPrice,
               productRating: productRating,
+              productId: productId,
             ),
           ],
         ),
