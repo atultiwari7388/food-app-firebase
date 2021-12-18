@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/presentation/View/DetailsPage/details.page.view.dart';
 import 'package:food_app/widgets/single_product.widget.dart';
 
 class GridViewWidget extends StatelessWidget {
@@ -62,6 +63,19 @@ class GridViewWidget extends StatelessWidget {
                 image: data["productImage"],
                 name: data["productName"],
                 price: data["productPrice"],
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailsPage(
+                      productName: data["productName"],
+                      productPrice: data["productPrice"],
+                      productImage: data["productImage"],
+                      productDescription: data["productDescription"],
+                      productOldPrice: data["productOldPrice"],
+                      productRating: data["productRating"],
+                    ),
+                  ),
+                ),
               );
             },
 

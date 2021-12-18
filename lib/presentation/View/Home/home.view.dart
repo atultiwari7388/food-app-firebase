@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/models/user_model.dart';
+import 'package:food_app/presentation/View/DetailsPage/details.page.view.dart';
 import 'package:food_app/presentation/View/Home/Components/card_section.dart';
 import 'package:food_app/widgets/grid_view.widget.dart';
 import 'package:food_app/widgets/single_product.widget.dart';
-import 'package:shimmer/shimmer.dart';
 
 UserModel? userModel;
 
@@ -180,10 +180,24 @@ class _HomeViewState extends State<HomeView> {
                   scrollDirection: Axis.horizontal,
                   itemCount: streamSnapshot.data!.docs.length,
                   itemBuilder: (context, index) {
+                    var data = streamSnapshot.data!.docs[index];
                     return SingleProductWidget(
-                      name: streamSnapshot.data!.docs[index]["productName"],
-                      image: streamSnapshot.data!.docs[index]["productImage"],
-                      price: streamSnapshot.data!.docs[index]["productPrice"],
+                      name: data["productName"],
+                      image: data["productImage"],
+                      price: data["productPrice"],
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsPage(
+                            productImage: data["productImage"],
+                            productName: data["productName"],
+                            productDescription: data["productDescription"],
+                            productOldPrice: data["productOldPrice"],
+                            productPrice: data["productPrice"],
+                            productRating: data["productRating"],
+                          ),
+                        ),
+                      ),
                     );
                   },
                 );
@@ -225,10 +239,24 @@ class _HomeViewState extends State<HomeView> {
                   scrollDirection: Axis.horizontal,
                   itemCount: streamSnapshot.data!.docs.length,
                   itemBuilder: (context, index) {
+                    var data = streamSnapshot.data!.docs[index];
                     return SingleProductWidget(
-                      name: streamSnapshot.data!.docs[index]["productName"],
-                      image: streamSnapshot.data!.docs[index]["productImage"],
-                      price: streamSnapshot.data!.docs[index]["productPrice"],
+                      name: data["productName"],
+                      image: data["productImage"],
+                      price: data["productPrice"],
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsPage(
+                            productImage: data["productImage"],
+                            productName: data["productName"],
+                            productDescription: data["productDescription"],
+                            productOldPrice: data["productOldPrice"],
+                            productPrice: data["productPrice"],
+                            productRating: data["productRating"],
+                          ),
+                        ),
+                      ),
                     );
                   },
                 );
