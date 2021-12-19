@@ -8,10 +8,12 @@ class GridViewWidget extends StatelessWidget {
     Key? key,
     required this.id,
     required this.collection,
+    required this.productCategory,
   }) : super(key: key);
 
   final String? id;
   final String? collection;
+  final String? productCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +76,7 @@ class GridViewWidget extends StatelessWidget {
                       productOldPrice: data["productOldPrice"],
                       productRating: data["productRating"],
                       productId: data["productId"],
+                      productCategory: data["productCategory"],
                     ),
                   ),
                 ),

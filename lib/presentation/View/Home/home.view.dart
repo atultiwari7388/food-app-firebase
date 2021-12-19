@@ -91,6 +91,8 @@ class _HomeViewState extends State<HomeView> {
                               collection: streamSnapshot.data!.docs[index]
                                   ["categoryName"],
                               id: streamSnapshot.data!.docs[index].id,
+                              productCategory: streamSnapshot.data!.docs[index]
+                                  ["categoryName"],
                             ),
                           ),
                         );
@@ -196,6 +198,7 @@ class _HomeViewState extends State<HomeView> {
                             productPrice: data["productPrice"],
                             productRating: data["productRating"],
                             productId: data["productId"],
+                            productCategory: data["productCategory"],
                           ),
                         ),
                       ),
@@ -256,6 +259,7 @@ class _HomeViewState extends State<HomeView> {
                             productPrice: data["productPrice"],
                             productRating: data["productRating"],
                             productId: data["productId"],
+                            productCategory: data["productCategory"],
                           ),
                         ),
                       ),
