@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_app/widgets/cart.widget.dart';
 
 class CartView extends StatelessWidget {
   const CartView({Key? key}) : super(key: key);
@@ -10,97 +13,45 @@ class CartView extends StatelessWidget {
         elevation: 1.0,
         title: Text('Cart'),
       ),
-      body: ListView(
-        children: [
-          Container(
-            margin: EdgeInsets.all(20.0),
-            height: 160,
-            width: double.infinity,
-            // color: Colors.red,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    color: Colors.green,
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(
-                          "ProductName",
-                          style: TextStyle(
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                        Text(
-                          "ProductCategory",
-                          style: TextStyle(),
-                        ),
-                        Text(
-                          "ProductPrice",
-                          style: TextStyle(),
-                        ),
-                        Container(
-                          width: 100.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.0),
-                            border: Border.all(width: 0.9, color: Colors.black),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () {},
-                                child: Text(
-                                  "-",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              Text(
-                                "1",
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              SizedBox(width: 20),
-                              GestureDetector(
-                                onTap: () {},
-                                child: Text(
-                                  "+",
-                                  style: TextStyle(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
       bottomNavigationBar: ElevatedButton(
         onPressed: () {},
         child: Text("CHECKOUT"),
+      ),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection("cart")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection("userCart")
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (!streamSnapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+
+          return ListView.separated(
+            physics: BouncingScrollPhysics(),
+            separatorBuilder: (context, index) {
+              return Divider(
+                color: Colors.grey,
+                height: 1.0,
+              );
+            },
+            itemCount: streamSnapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              var data = streamSnapshot.data!.docs[index];
+              return CartWidget(
+                productName: data["productName"],
+                productImage: data["productImage"],
+                productPrice: data["productPrice"],
+                productQuantity: data["productQuantity"],
+              );
+            },
+          );
+        },
       ),
     );
   }
