@@ -13,6 +13,7 @@ class DetailsComponent extends StatelessWidget {
     required this.productRating,
     required this.productId,
     required this.productImage,
+    required this.productCategory,
   }) : super(key: key);
 
   final String productName;
@@ -22,6 +23,7 @@ class DetailsComponent extends StatelessWidget {
   final double productRating;
   final String productId;
   final String productImage;
+  final String productCategory;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -81,6 +83,7 @@ class DetailsComponent extends StatelessWidget {
                     "productId": productId,
                     "productName": productName,
                     "productImage": productImage,
+                    "productCategory": productCategory,
                     "productPrice": productPrice,
                     "productDescription": productDescription,
                     "productQuantity": 1,

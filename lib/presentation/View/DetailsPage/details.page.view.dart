@@ -13,6 +13,7 @@ class DetailsPage extends StatelessWidget {
     required this.productOldPrice,
     required this.productPrice,
     required this.productRating,
+    required this.productCategory,
   }) : super(key: key);
 
   final String productId;
@@ -22,6 +23,7 @@ class DetailsPage extends StatelessWidget {
   final double productOldPrice;
   final double productPrice;
   final double productRating;
+  final String productCategory;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class DetailsPage extends StatelessWidget {
               productPrice: productPrice,
               productRating: productRating,
               productId: productId,
+              productCategory: productCategory,
             ),
           ],
         ),

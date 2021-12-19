@@ -43,11 +43,20 @@ class CartView extends StatelessWidget {
             itemCount: streamSnapshot.data!.docs.length,
             itemBuilder: (context, index) {
               var data = streamSnapshot.data!.docs[index];
+
+              if (!streamSnapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
               return CartWidget(
                 productName: data["productName"],
                 productImage: data["productImage"],
                 productPrice: data["productPrice"],
                 productQuantity: data["productQuantity"],
+                productCategory: data["productCategory"],
+                productId: data["productId"],
               );
             },
           );
