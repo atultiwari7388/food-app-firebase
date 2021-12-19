@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 
@@ -37,6 +38,15 @@ class _CartWidgetState extends State<CartWidget> {
         .update({
       "productQuantity": quantity,
     });
+  }
+
+  void removeProductfromCart() {
+    FirebaseFirestore.instance
+        .collection("cart")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("userCart")
+        .doc(widget.productId)
+        .delete();
   }
 
   @override
@@ -153,7 +163,56 @@ class _CartWidgetState extends State<CartWidget> {
               ),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      return CupertinoAlertDialog(
+                        title: Text(
+                            "Are you sure you want to remove this item from cart?"),
+                        actions: [
+                          CupertinoDialogAction(
+                            child: Text("Yes"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                              removeProductfromCart();
+                            },
+                          ),
+                          CupertinoDialogAction(
+                            child: Text("No"),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      );
+                    });
+
+                // showDialog(
+                //     context: context,
+                //     builder: (context) {
+                //       return AlertDialog(
+                //         title: Text("Remove Product"),
+                //         content: Text(
+                //             "Are you sure you want to remove this product from cart?"),
+                //         actions: [
+                //           FlatButton(
+                //             onPressed: () {
+                //               Navigator.of(context).pop();
+                //             },
+                //             child: Text("No"),
+                //           ),
+                //           FlatButton(
+                //             onPressed: () {
+                //               Navigator.of(context).pop();
+                //               removeProductfromCart();
+                //             },
+                //             child: Text("Yes"),
+                //           ),
+                //         ],
+                //       );
+                //     });
+              },
               icon: Icon(
                 IconlyBold.delete,
                 color: Colors.red,

@@ -32,34 +32,59 @@ class CartView extends StatelessWidget {
             );
           }
 
-          return ListView.separated(
-            physics: BouncingScrollPhysics(),
-            separatorBuilder: (context, index) {
-              return Divider(
-                color: Colors.grey,
-                height: 1.0,
-              );
-            },
-            itemCount: streamSnapshot.data!.docs.length,
-            itemBuilder: (context, index) {
-              var data = streamSnapshot.data!.docs[index];
+          return streamSnapshot.data!.docs.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Your cart is empty",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "Start adding some items to your cart",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.separated(
+                  physics: BouncingScrollPhysics(),
+                  separatorBuilder: (context, index) {
+                    return Divider(
+                      color: Colors.grey,
+                      height: 1.0,
+                    );
+                  },
+                  itemCount: streamSnapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    var data = streamSnapshot.data!.docs[index];
 
-              if (!streamSnapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
+                    if (!streamSnapshot.hasData) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    return CartWidget(
+                      productName: data["productName"],
+                      productImage: data["productImage"],
+                      productPrice: data["productPrice"],
+                      productQuantity: data["productQuantity"],
+                      productCategory: data["productCategory"],
+                      productId: data["productId"],
+                    );
+                  },
                 );
-              }
-
-              return CartWidget(
-                productName: data["productName"],
-                productImage: data["productImage"],
-                productPrice: data["productPrice"],
-                productQuantity: data["productQuantity"],
-                productCategory: data["productCategory"],
-                productId: data["productId"],
-              );
-            },
-          );
         },
       ),
     );
