@@ -55,7 +55,7 @@ class CustomDrawer extends StatelessWidget {
                     ),
                     SizedBox(width: 7.0),
                     Text(
-                      userModel!.fullName,
+                      userModel.fullName,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20.0,

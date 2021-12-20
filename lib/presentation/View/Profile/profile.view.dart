@@ -66,8 +66,8 @@ class _ProfileViewState extends State<ProfileView> {
             Container(
               child: Column(
                 children: [
-                  textFromField(hintText: userModel!.fullName),
-                  textFromField(hintText: userModel!.emailAddress),
+                  textFromField(hintText: userModel.fullName),
+                  textFromField(hintText: userModel.emailAddress),
                   SizedBox(height: 30),
                 ],
               ),
