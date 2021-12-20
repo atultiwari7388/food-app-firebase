@@ -7,7 +7,7 @@ import 'package:food_app/presentation/View/Home/Components/card_section.dart';
 import 'package:food_app/widgets/grid_view.widget.dart';
 import 'package:food_app/widgets/single_product.widget.dart';
 
-UserModel? userModel;
+late UserModel userModel;
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);

@@ -29,8 +29,8 @@ class CartWidget extends StatefulWidget {
 class _CartWidgetState extends State<CartWidget> {
   int quantity = 1;
 
-  void quantityCounter() {
-    FirebaseFirestore.instance
+  void quantityCounter() async {
+    await FirebaseFirestore.instance
         .collection("cart")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("userCart")
@@ -40,8 +40,8 @@ class _CartWidgetState extends State<CartWidget> {
     });
   }
 
-  void removeProductfromCart() {
-    FirebaseFirestore.instance
+  void removeProductfromCart() async {
+    await FirebaseFirestore.instance
         .collection("cart")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("userCart")

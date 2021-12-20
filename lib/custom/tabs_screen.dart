@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:food_app/presentation/View/Cart/cart.view.dart';
 import 'package:food_app/presentation/View/Home/home.view.dart';
-import 'package:food_app/presentation/View/Profile/profile.view.dart';
 import 'package:food_app/presentation/View/Search/search.view.dart';
 
 class TabsScreen extends StatefulWidget {
@@ -19,7 +18,7 @@ class _TabsScreenState extends State<TabsScreen> {
     HomeView(),
     SearchView(),
     CartView(),
-    ProfileView(),
+    // ProfileView(),
   ];
 
   @override
@@ -51,12 +50,12 @@ class _TabsScreenState extends State<TabsScreen> {
             label: "Cart",
             backgroundColor: Colors.blue,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(
-                currentIndex == 3 ? IconlyBold.profile : IconlyLight.profile),
-            label: "Profile",
-            backgroundColor: Colors.blue,
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(
+          //       currentIndex == 3 ? IconlyBold.profile : IconlyLight.profile),
+          //   label: "Profile",
+          //   backgroundColor: Colors.blue,
+          // ),
         ],
       ),
     );
