@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/presentation/View/Cart/cart.view.dart';
+import 'package:food_app/widgets/rating_star.dart';
 
 class DetailsComponent extends StatelessWidget {
   const DetailsComponent({
@@ -54,7 +52,9 @@ class DetailsComponent extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(productRating.toString()),
+                  RatingStars(
+                    productRating,
+                  ),
                   Text("10 Reviews"),
                 ],
               ),
@@ -63,45 +63,28 @@ class DetailsComponent extends StatelessWidget {
           ),
           Text("Description:"),
           Text(productDescription),
-          Center(
-            child: SizedBox(
-              height: 44.0,
-              width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                ),
-                onPressed: () {
-                  FirebaseFirestore.instance
-                      .collection("cart")
-                      .doc(FirebaseAuth.instance.currentUser!.uid)
-                      .collection("userCart")
-                      .doc(productId)
-                      .set({
-                    "productId": productId,
-                    "productName": productName,
-                    "productImage": productImage,
-                    "productCategory": productCategory,
-                    "productPrice": productPrice,
-                    "productDescription": productDescription,
-                    "productQuantity": 1,
-                  });
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CartView(),
-                    ),
-                  );
-                },
-                child: Text(
-                  "Add to Cart",
-                  style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w600),
-                ),
-              ),
-            ),
-          ),
+
+          SizedBox(height: 50),
+          // Center(
+          //   child: SizedBox(
+          //     height: 44.0,
+          //     width: double.infinity,
+          //     child: ElevatedButton(
+          //       style: ElevatedButton.styleFrom(
+          //         shape: RoundedRectangleBorder(
+          //           borderRadius: BorderRadius.circular(10.0),
+          //         ),
+          //       ),
+          //       onPressed: () {
+
+          //       },
+          //       child: Text(
+          //         "Add to Cart",
+          //         style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.w600),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

@@ -1,16 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/custom/tabs_screen.dart';
-import 'package:food_app/provider/cart.procider.dart';
+import 'package:food_app/provider/cart.provider.dart';
 import 'package:food_app/widgets/cart.widget.dart';
 import 'package:provider/provider.dart';
 
-class CheckOutScreen extends StatelessWidget {
+class CheckOutScreen extends StatefulWidget {
   const CheckOutScreen({Key? key}) : super(key: key);
 
+  @override
+  State<CheckOutScreen> createState() => _CheckOutScreenState();
+}
+
+class _CheckOutScreenState extends State<CheckOutScreen> {
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of<CartProvider>(context);
     cartProvider.getCartData();
+
+    //get subtotal func
+
+    double subTotal = cartProvider.subTotal();
+    double discountPrice = 18.0;
+    int shippingCharges = 40;
+
+    double discountValue = (subTotal * discountPrice) / 100;
+
+    double total = subTotal - discountValue + shippingCharges;
+
+    if (cartProvider.getCartListData.isEmpty) {
+      setState(() {
+        total = 0.0;
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("CheckOut"),
@@ -56,29 +78,71 @@ class CheckOutScreen extends StatelessWidget {
             child: Column(
               children: [
                 ListTile(
-                  leading: Text("SubTotal"),
-                  trailing: Text("\₹100"),
+                  leading: Text(
+                    "SubTotal",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  trailing: Text(
+                    "\₹$subTotal",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 ListTile(
-                  leading: Text("Discount"),
-                  trailing: Text("\₹100"),
+                  leading: Text(
+                    "Discount",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  trailing: Text(
+                    "\₹$discountValue",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 ListTile(
-                  leading: Text("Shipping Charges"),
-                  trailing: Text("\₹100"),
+                  leading: Text(
+                    "Shipping Charges",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  trailing: Text(
+                    "\₹$shippingCharges",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                Divider(thickness: 4.0),
+                Divider(thickness: 3.0),
                 ListTile(
-                  leading: Text("Total Price"),
-                  trailing: Text("\₹100"),
+                  leading: Text(
+                    "Your Price",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  trailing: Text(
+                    "\₹$total",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-                // Align(
-                //   alignment: Alignment.bottomLeft,
-                //   child: FilledButtonWidget(
-                //     btnName: "Pay",
-                //     onPressed: () {},
-                //   ),
-                // )
               ],
             ),
           ),

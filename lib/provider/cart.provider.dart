@@ -30,4 +30,15 @@ class CartProvider extends ChangeNotifier {
   List<CartModel> get getCartListData {
     return cartLists;
   }
+
+// subtotal func
+
+  double subTotal() {
+    double subtotal = 0.0;
+    cartLists.forEach((element) {
+      subtotal += element.productPrice * element.productQuantity;
+    });
+
+    return subtotal;
+  }
 }
