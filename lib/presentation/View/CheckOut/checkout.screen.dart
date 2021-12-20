@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/custom/tabs_screen.dart';
-import 'package:food_app/provider/cart.procider.dart';
+import 'package:food_app/provider/cart.provider.dart';
 import 'package:food_app/widgets/cart.widget.dart';
 import 'package:provider/provider.dart';
 
@@ -78,7 +78,13 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
             child: Column(
               children: [
                 ListTile(
-                  leading: Text("SubTotal"),
+                  leading: Text(
+                    "SubTotal",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   trailing: Text(
                     "\₹$subTotal",
                     style: TextStyle(
@@ -88,17 +94,54 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                   ),
                 ),
                 ListTile(
-                  leading: Text("Discount"),
-                  trailing: Text("\₹$discountValue"),
+                  leading: Text(
+                    "Discount",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  trailing: Text(
+                    "\₹$discountValue",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 ListTile(
-                  leading: Text("Shipping Charges"),
-                  trailing: Text("\₹$shippingCharges"),
+                  leading: Text(
+                    "Shipping Charges",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  trailing: Text(
+                    "\₹$shippingCharges",
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
                 Divider(thickness: 3.0),
                 ListTile(
-                  leading: Text("Total Price"),
-                  trailing: Text("\₹$total"),
+                  leading: Text(
+                    "Your Price",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  trailing: Text(
+                    "\₹$total",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_app/custom/tabs_screen.dart';
 import 'package:food_app/presentation/View/CheckOut/checkout.screen.dart';
-import 'package:food_app/provider/cart.procider.dart';
+import 'package:food_app/provider/cart.provider.dart';
 import 'package:food_app/widgets/cart.widget.dart';
 import 'package:provider/provider.dart';
 

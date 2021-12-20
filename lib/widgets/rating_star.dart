@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class RatingStars extends StatelessWidget {
   RatingStars(this.rating);
-  final rating;
+  final double rating;
 
   @override
   Widget build(BuildContext context) {

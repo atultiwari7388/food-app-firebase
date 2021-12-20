@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:food_app/app/routes/app.routes.dart';
 import 'package:food_app/presentation/View/SignIn/components/signin_authprovider.dart';
 import 'package:food_app/presentation/View/SignUp/components/signup_authprovider.dart';
-import 'package:food_app/provider/cart.procider.dart';
+import 'package:food_app/provider/cart.provider.dart';
+import 'package:food_app/provider/fav.provider.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => SignupAuthProvider()),
         ChangeNotifierProvider(create: (context) => SignInAuthProvider()),
         ChangeNotifierProvider(create: (context) => CartProvider()),
+        ChangeNotifierProvider(create: (context) => FavoritesProvider()),
       ],
       child: MaterialApp(
         title: 'Food App',
