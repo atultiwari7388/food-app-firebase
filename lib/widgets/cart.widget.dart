@@ -187,31 +187,6 @@ class _CartWidgetState extends State<CartWidget> {
                         ],
                       );
                     });
-
-                // showDialog(
-                //     context: context,
-                //     builder: (context) {
-                //       return AlertDialog(
-                //         title: Text("Remove Product"),
-                //         content: Text(
-                //             "Are you sure you want to remove this product from cart?"),
-                //         actions: [
-                //           FlatButton(
-                //             onPressed: () {
-                //               Navigator.of(context).pop();
-                //             },
-                //             child: Text("No"),
-                //           ),
-                //           FlatButton(
-                //             onPressed: () {
-                //               Navigator.of(context).pop();
-                //               removeProductfromCart();
-                //             },
-                //             child: Text("Yes"),
-                //           ),
-                //         ],
-                //       );
-                //     });
               },
               icon: Icon(
                 IconlyBold.delete,

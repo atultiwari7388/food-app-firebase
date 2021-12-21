@@ -36,6 +36,149 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
+  Widget getCategoriesData() {
+    return Column(
+      children: [
+        ListTile(
+          leading: Text(
+            "Categories",
+            style: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+        ),
+
+        // get category data
+
+        Container(
+          height: 100,
+          child: StreamBuilder(
+            stream:
+                FirebaseFirestore.instance.collection("categories").snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+              if (!streamSnapshot.hasData) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Colors.green,
+                  ),
+                );
+              }
+              return ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: streamSnapshot.data!.docs.length,
+                itemBuilder: (context, index) {
+                  return Categories(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GridViewWidget(
+                            collection: "categories",
+                            id: streamSnapshot.data!.docs[index].id,
+                            productCategory: streamSnapshot.data!.docs[index]
+                                ["categoryName"],
+                            firebaseSubCollectionName: streamSnapshot
+                                .data!.docs[index]["categoryName"],
+                          ),
+                        ),
+                      );
+                    },
+                    categoryName: streamSnapshot.data!.docs[index]
+                        ["categoryName"],
+                    categoryImage: streamSnapshot.data!.docs[index]
+                        ["categoryImage"],
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget getPopularProduct(
+      {required Stream<QuerySnapshot<Map<String, dynamic>>>? stream}) {
+    return Container(
+      // FirebaseFirestore.instance.collection("popularBrands").snapshots(),
+      height: 180,
+      child: StreamBuilder(
+        stream: stream,
+        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (!streamSnapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            itemCount: streamSnapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int index) {
+              var data = streamSnapshot.data!.docs[index];
+              return PopularBrands(
+                brandsImage: data["popularImage"],
+                brandsName: data["popularName"],
+                brandsTiming: data["popularTiming"],
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget getAllProductData(
+      {required Stream<QuerySnapshot<Map<String, dynamic>>>? stream}) {
+    return Container(
+      height: 260,
+      child: StreamBuilder(
+        stream: stream,
+        builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+          if (!streamSnapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Colors.green,
+              ),
+            );
+          }
+          return ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: streamSnapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              var data = streamSnapshot.data!.docs[index];
+              return SingleProductWidget(
+                name: data["productName"],
+                image: data["productImage"],
+                price: data["productPrice"],
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DetailsPage(
+                      productImage: data["productImage"],
+                      productName: data["productName"],
+                      productDescription: data["productDescription"],
+                      productOldPrice: data["productOldPrice"],
+                      productPrice: data["productPrice"],
+                      productRating: data["productRating"],
+                      productId: data["productId"],
+                      productCategory: data["productCategory"],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     getCurrentUserData();
@@ -51,63 +194,8 @@ class _HomeViewState extends State<HomeView> {
           SizedBox(height: 20),
           CardSection(),
           SizedBox(height: 20),
-          ListTile(
-            leading: Text(
-              "Categories",
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).primaryColor,
-              ),
-            ),
-          ),
-
-          // get category data
-
-          Container(
-            height: 100,
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection("categories")
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                if (!streamSnapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: streamSnapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    return Categories(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GridViewWidget(
-                              collection: streamSnapshot.data!.docs[index]
-                                  ["categoryName"],
-                              id: streamSnapshot.data!.docs[index].id,
-                              productCategory: streamSnapshot.data!.docs[index]
-                                  ["categoryName"],
-                            ),
-                          ),
-                        );
-                      },
-                      categoryName: streamSnapshot.data!.docs[index]
-                          ["categoryName"],
-                      categoryImage: streamSnapshot.data!.docs[index]
-                          ["categoryImage"],
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-
+          //categories data
+          getCategoriesData(),
           ListTile(
             leading: Text(
               "Popular Brands",
@@ -120,36 +208,10 @@ class _HomeViewState extends State<HomeView> {
           ),
 
           // get popular product data
-          Container(
-            height: 180,
-            child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("popularBrands")
-                    .snapshots(),
-                builder:
-                    (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                  if (!streamSnapshot.hasData) {
-                    return Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.green,
-                      ),
-                    );
-                  }
-
-                  return ListView.builder(
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: streamSnapshot.data!.docs.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      var data = streamSnapshot.data!.docs[index];
-                      return PopularBrands(
-                        brandsImage: data["popularImage"],
-                        brandsName: data["popularName"],
-                        brandsTiming: data["popularTiming"],
-                      );
-                    },
-                  );
-                }),
+          getPopularProduct(
+            stream: FirebaseFirestore.instance
+                .collection("popularBrands")
+                .snapshots(),
           ),
 
           ListTile(
@@ -162,51 +224,11 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
-
           // get picked for you data
 
-          Container(
-            height: 260,
-            child: StreamBuilder(
-              stream:
-                  FirebaseFirestore.instance.collection("products").snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                if (!streamSnapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: streamSnapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var data = streamSnapshot.data!.docs[index];
-                    return SingleProductWidget(
-                      name: data["productName"],
-                      image: data["productImage"],
-                      price: data["productPrice"],
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                            productImage: data["productImage"],
-                            productName: data["productName"],
-                            productDescription: data["productDescription"],
-                            productOldPrice: data["productOldPrice"],
-                            productPrice: data["productPrice"],
-                            productRating: data["productRating"],
-                            productId: data["productId"],
-                            productCategory: data["productCategory"],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+          getAllProductData(
+            stream:
+                FirebaseFirestore.instance.collection("products").snapshots(),
           ),
 
           ListTile(
@@ -222,52 +244,12 @@ class _HomeViewState extends State<HomeView> {
 
           // get best selling product
 
-          Container(
-            height: 260,
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection("products")
-                  .where("productRating", isGreaterThan: 3.5)
-                  .orderBy("productRating", descending: true)
-                  .snapshots(),
-              builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                if (!streamSnapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.green,
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: streamSnapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var data = streamSnapshot.data!.docs[index];
-                    return SingleProductWidget(
-                      name: data["productName"],
-                      image: data["productImage"],
-                      price: data["productPrice"],
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => DetailsPage(
-                            productImage: data["productImage"],
-                            productName: data["productName"],
-                            productDescription: data["productDescription"],
-                            productOldPrice: data["productOldPrice"],
-                            productPrice: data["productPrice"],
-                            productRating: data["productRating"],
-                            productId: data["productId"],
-                            productCategory: data["productCategory"],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
+          getAllProductData(
+            stream: FirebaseFirestore.instance
+                .collection("products")
+                .where("productRating", isGreaterThan: 3.5)
+                .orderBy("productRating", descending: true)
+                .snapshots(),
           ),
 
           SizedBox(height: 100),

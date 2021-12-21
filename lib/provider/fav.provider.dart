@@ -12,14 +12,16 @@ class FavoritesProvider with ChangeNotifier {
     required productOldPrice,
     required productRating,
     required productFavorite,
+    required productDescription,
   }) {
     FirebaseFirestore.instance
         .collection("favoriteItems")
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("userFavorite")
+        .collection("wishLists")
         .doc(productId)
         .set({
       "productId": productId,
+      "productDescription": productDescription,
       "productCategory": productCategory,
       "productImage": productImage,
       "productName": productName,
@@ -28,5 +30,15 @@ class FavoritesProvider with ChangeNotifier {
       "productRating": productRating,
       "productFavorite": productFavorite,
     });
+  }
+
+  void deleteFavoriteItem({required String productId}) {
+    FirebaseFirestore.instance
+        .collection("favoriteItems")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("wishLists")
+        .doc(productId)
+        .delete();
+    notifyListeners();
   }
 }

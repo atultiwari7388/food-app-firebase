@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/presentation/View/DetailsPage/details.page.view.dart';
 import 'package:food_app/widgets/single_product.widget.dart';
+import 'package:lottie/lottie.dart';
 
 class GridViewWidget extends StatelessWidget {
   const GridViewWidget({
@@ -9,11 +10,13 @@ class GridViewWidget extends StatelessWidget {
     required this.id,
     required this.collection,
     required this.productCategory,
+    required this.firebaseSubCollectionName,
   }) : super(key: key);
 
   final String? id;
   final String? collection;
   final String? productCategory;
+  final String? firebaseSubCollectionName;
 
   @override
   Widget build(BuildContext context) {
@@ -21,25 +24,25 @@ class GridViewWidget extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: IconThemeData(color: Colors.black),
+        automaticallyImplyLeading: false,
+        iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          collection!.toUpperCase(),
+          firebaseSubCollectionName!.toUpperCase(),
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
             letterSpacing: 2.3,
           ),
         ),
       ),
-      body: FutureBuilder(
-        future: FirebaseFirestore.instance
-            .collection("categories")
-            .doc(id)
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance
             .collection(collection!)
-            .get(),
+            .doc(id)
+            .collection(firebaseSubCollectionName!)
+            .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -47,44 +50,50 @@ class GridViewWidget extends StatelessWidget {
             );
           }
 
-          return GridView.builder(
-            physics: BouncingScrollPhysics(),
-            // scrollDirection: Axis.vertical,
-            // shrinkWrap: true,
-            // itemCount: snapshot.data?.docs.length ?? 0,
-            itemCount: snapshot.data!.docs.length,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 0.7,
-              crossAxisCount: 2,
-              mainAxisSpacing: 1,
-              crossAxisSpacing: 1,
-            ),
-            itemBuilder: (context, index) {
-              var data = snapshot.data!.docs[index];
-              return SingleProductWidget(
-                image: data["productImage"],
-                name: data["productName"],
-                price: data["productPrice"],
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailsPage(
-                      productName: data["productName"],
-                      productPrice: data["productPrice"],
-                      productImage: data["productImage"],
-                      productDescription: data["productDescription"],
-                      productOldPrice: data["productOldPrice"],
-                      productRating: data["productRating"],
-                      productId: data["productId"],
-                      productCategory: data["productCategory"],
-                    ),
+          return snapshot.data!.docs.isEmpty
+              ? Center(
+                  child: Lottie.asset(
+                    "assets/notfound.json",
+                    fit: BoxFit.cover,
+                    repeat: true,
+                    reverse: true,
                   ),
-                ),
-              );
-            },
+                )
+              : GridView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: snapshot.data!.docs.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 0.7,
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 1,
+                    crossAxisSpacing: 1,
+                  ),
+                  itemBuilder: (context, index) {
+                    var data = snapshot.data!.docs[index];
+                    return SingleProductWidget(
+                      image: data["productImage"],
+                      name: data["productName"],
+                      price: data["productPrice"],
+                      onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsPage(
+                            productName: data["productName"],
+                            productPrice: data["productPrice"],
+                            productImage: data["productImage"],
+                            productDescription: data["productDescription"],
+                            productOldPrice: data["productOldPrice"],
+                            productRating: data["productRating"],
+                            productId: data["productId"],
+                            productCategory: data["productCategory"],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
 
-            // SizedBox(height: 200),
-          );
+                  // SizedBox(height: 200),
+                );
         },
       ),
     );

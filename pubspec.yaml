@@ -11,6 +11,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_auth: ^3.3.3
   flutter_iconly: ^1.0.2
+  razorpay_flutter: ^1.2.7
+  lottie: ^1.2.1
   shimmer: ^2.0.0
 
   

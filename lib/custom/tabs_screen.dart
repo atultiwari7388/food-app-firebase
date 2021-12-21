@@ -3,6 +3,7 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:food_app/presentation/View/Cart/cart.view.dart';
 import 'package:food_app/presentation/View/Home/home.view.dart';
 import 'package:food_app/presentation/View/Search/search.view.dart';
+import 'package:food_app/presentation/View/favorites/favorites.screen.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({Key? key}) : super(key: key);
@@ -18,6 +19,7 @@ class _TabsScreenState extends State<TabsScreen> {
     HomeView(),
     SearchView(),
     CartView(),
+    FavoriteScreen(),
     // ProfileView(),
   ];
 
@@ -50,12 +52,12 @@ class _TabsScreenState extends State<TabsScreen> {
             label: "Cart",
             backgroundColor: Colors.blue,
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(
-          //       currentIndex == 3 ? IconlyBold.profile : IconlyLight.profile),
-          //   label: "Profile",
-          //   backgroundColor: Colors.blue,
-          // ),
+          BottomNavigationBarItem(
+            icon:
+                Icon(currentIndex == 3 ? IconlyBold.heart : IconlyLight.heart),
+            label: "Favorite",
+            backgroundColor: Colors.blue,
+          ),
         ],
       ),
     );

@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/custom/tabs_screen.dart';
 import 'package:food_app/provider/cart.provider.dart';
 import 'package:food_app/widgets/cart.widget.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class CheckOutScreen extends StatefulWidget {
   const CheckOutScreen({Key? key}) : super(key: key);
@@ -12,6 +14,109 @@ class CheckOutScreen extends StatefulWidget {
 }
 
 class _CheckOutScreenState extends State<CheckOutScreen> {
+  late Razorpay razorpay;
+  late double totalPrice;
+
+  @override
+  void initState() {
+    super.initState();
+    razorpay = Razorpay();
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    razorpay.clear();
+  }
+
+  void openCheckout() async {
+    var options = {
+      'key': 'rzp_test_xLObtDVYuUA0Ry',
+      'amount': num.parse(totalPrice.toString()).toInt() * 100,
+      'name': 'Food Order',
+      'description': 'Product Description',
+      'prefill': {
+        'contact': '+916307537145',
+        'email': 'tiwariatul9526@gmail.com',
+      },
+      'external': {
+        'wallets': ['paytm', 'phonepe', 'googlepay'],
+      }
+    };
+
+    try {
+      razorpay.open(options);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Payment Successful'),
+          content: Text('Your order has been placed successfully'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Payment Failed'),
+          content: Text('Your order has been failed'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Something Error'),
+          content: Text('External Error'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     CartProvider cartProvider = Provider.of<CartProvider>(context);
@@ -21,15 +126,15 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
     double subTotal = cartProvider.subTotal();
     double discountPrice = 18.0;
-    int shippingCharges = 40;
+    int shippingCharges = 1;
 
     double discountValue = (subTotal * discountPrice) / 100;
 
-    double total = subTotal - discountValue + shippingCharges;
+    totalPrice = subTotal - discountValue + shippingCharges;
 
     if (cartProvider.getCartListData.isEmpty) {
       setState(() {
-        total = 0.0;
+        totalPrice = 0.0;
       });
     }
 
@@ -136,7 +241,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
                     ),
                   ),
                   trailing: Text(
-                    "\₹$total",
+                    "\₹$totalPrice",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -170,7 +275,9 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50.0),
               ),
-              onPressed: () {},
+              onPressed: () {
+                openCheckout();
+              },
               child: Text(
                 "Pay",
                 style: TextStyle(color: Colors.white, fontSize: 20.0),

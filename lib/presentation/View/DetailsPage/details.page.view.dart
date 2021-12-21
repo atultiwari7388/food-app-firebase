@@ -47,7 +47,7 @@ class _DetailsPageState extends State<DetailsPage> {
     FirebaseFirestore.instance
         .collection("favoriteItems")
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("userFavorite")
+        .collection("wishLists")
         .doc(widget.productId)
         .get()
         .then((value) {
@@ -140,14 +140,10 @@ class _DetailsPageState extends State<DetailsPage> {
                       productOldPrice: widget.productOldPrice,
                       productRating: widget.productRating,
                       productFavorite: true,
+                      productDescription: widget.productDescription,
                     );
                   } else if (isFavorite == false) {
-                    FirebaseFirestore.instance
-                        .collection("favoriteItems")
-                        .doc(FirebaseAuth.instance.currentUser!.uid)
-                        .collection("userFavorite")
-                        .doc(widget.productId)
-                        .delete();
+                    favProvider.deleteFavoriteItem(productId: widget.productId);
                   }
                 });
               },
