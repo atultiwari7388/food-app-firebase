@@ -84,7 +84,7 @@ class SignupAuthProvider extends ChangeNotifier {
         ).then((value) async {
           isLoading = false;
           notifyListeners();
-          Text("Account Created Successfully");
+          // Text("Account Created Successfully");
 
           await Navigator.pushNamedAndRemoveUntil(
             context,

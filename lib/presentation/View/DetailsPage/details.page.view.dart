@@ -47,7 +47,7 @@ class _DetailsPageState extends State<DetailsPage> {
     FirebaseFirestore.instance
         .collection("favoriteItems")
         .doc(FirebaseAuth.instance.currentUser!.uid)
-        .collection("userFavorite")
+        .collection("wishLists")
         .doc(widget.productId)
         .get()
         .then((value) {

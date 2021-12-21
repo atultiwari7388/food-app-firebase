@@ -3,6 +3,7 @@ import 'package:food_app/custom/tabs_screen.dart';
 import 'package:food_app/presentation/View/CheckOut/checkout.screen.dart';
 import 'package:food_app/provider/cart.provider.dart';
 import 'package:food_app/widgets/cart.widget.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class CartView extends StatelessWidget {
@@ -50,7 +51,7 @@ class CartView extends StatelessWidget {
             ),
       body: cartProvider.getCartListData.isEmpty
           ? Center(
-              child: Text('Cart is empty'),
+              child: Lottie.asset("assets/emptycart.json", fit: BoxFit.cover),
             )
           : ListView.separated(
               physics: BouncingScrollPhysics(),

@@ -10,7 +10,7 @@ class FavoriteScreen extends StatelessWidget {
     return GridViewWidget(
       id: FirebaseAuth.instance.currentUser!.uid,
       collection: "favoriteItems",
-      firebaseSubCollectionName: "userFavorite",
+      firebaseSubCollectionName: "wishLists",
       productCategory: "categoryName",
     );
   }

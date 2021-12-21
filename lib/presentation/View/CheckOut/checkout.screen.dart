@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:food_app/custom/tabs_screen.dart';
 import 'package:food_app/provider/cart.provider.dart';
 import 'package:food_app/widgets/cart.widget.dart';
@@ -34,16 +34,16 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
   void openCheckout() async {
     var options = {
-      'key': 'rzp_test_1DP5mmOlF5G5ag',
+      'key': 'rzp_test_xLObtDVYuUA0Ry',
       'amount': num.parse(totalPrice.toString()).toInt() * 100,
       'name': 'Food Order',
       'description': 'Product Description',
       'prefill': {
-        'contact': '8888888888',
+        'contact': '+916307537145',
         'email': 'tiwariatul9526@gmail.com',
       },
       'external': {
-        'wallets': ['paytm']
+        'wallets': ['paytm', 'phonepe', 'googlepay'],
       }
     };
 
@@ -55,21 +55,66 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
   }
 
   void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    Fluttertoast.showToast(
-        msg: "SUCCESS: " + response.paymentId!,
-        toastLength: Toast.LENGTH_SHORT);
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Payment Successful'),
+          content: Text('Your order has been placed successfully'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    Fluttertoast.showToast(
-        msg: "ERROR: " + response.code.toString() + " - " + response.message!,
-        toastLength: Toast.LENGTH_SHORT);
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Payment Failed'),
+          content: Text('Your order has been failed'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 
   void _handleExternalWallet(ExternalWalletResponse response) {
-    Fluttertoast.showToast(
-        msg: "EXTERNAL_WALLET: " + response.walletName!,
-        toastLength: Toast.LENGTH_SHORT);
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text('Something Error'),
+          content: Text('External Error'),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -81,7 +126,7 @@ class _CheckOutScreenState extends State<CheckOutScreen> {
 
     double subTotal = cartProvider.subTotal();
     double discountPrice = 18.0;
-    int shippingCharges = 40;
+    int shippingCharges = 1;
 
     double discountValue = (subTotal * discountPrice) / 100;
 
