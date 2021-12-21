@@ -15,6 +15,7 @@ class CartView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 1.0,
         title: Text('Cart'),
       ),

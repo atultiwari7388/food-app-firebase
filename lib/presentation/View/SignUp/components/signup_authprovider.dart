@@ -84,13 +84,14 @@ class SignupAuthProvider extends ChangeNotifier {
         ).then((value) async {
           isLoading = false;
           notifyListeners();
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Your Account has been created successfully'),
-              backgroundColor: Colors.green,
-            ),
+          Text("Account Created Successfully");
+
+          await Navigator.pushNamedAndRemoveUntil(
+            context,
+            "/",
+            (route) => false,
           );
-          await Navigator.pushNamed(context, "/");
+          notifyListeners();
         });
       } on FirebaseAuthException catch (e) {
         isLoading = false;

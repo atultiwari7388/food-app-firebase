@@ -88,11 +88,12 @@ class _HomeViewState extends State<HomeView> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => GridViewWidget(
-                              collection: streamSnapshot.data!.docs[index]
-                                  ["categoryName"],
+                              collection: "categories",
                               id: streamSnapshot.data!.docs[index].id,
                               productCategory: streamSnapshot.data!.docs[index]
                                   ["categoryName"],
+                              firebaseSubCollectionName: streamSnapshot
+                                  .data!.docs[index]["categoryName"],
                             ),
                           ),
                         );

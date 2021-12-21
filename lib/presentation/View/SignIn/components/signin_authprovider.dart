@@ -67,7 +67,11 @@ class SignInAuthProvider extends ChangeNotifier {
           isLoading = false;
           notifyListeners();
           Text("Successfully Logged in");
-          await Navigator.of(context).pushReplacementNamed('/');
+          await Navigator.pushNamedAndRemoveUntil(
+            context,
+            "/",
+            (route) => false,
+          );
           notifyListeners();
         });
       } on FirebaseException catch (e) {
