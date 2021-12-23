@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/presentation/View/ForgotPass/forgot_pass.dart';
 import 'package:food_app/presentation/View/SignIn/components/signin_authprovider.dart';
 import 'package:food_app/widgets/filled_btn.widget.dart';
 import 'package:provider/provider.dart';
@@ -70,6 +71,17 @@ class _SignInViewState extends State<SignInView> {
                       prefixIcon: Icon(Icons.lock_outline,
                           size: 30, color: Colors.green),
                       labelText: "Password",
+                      counter: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ForgotPassword(),
+                            ),
+                          );
+                        },
+                        child: Text("Forgot Password ?"),
+                      ),
                       suffixIcon: IconButton(
                         onPressed: () {
                           setState(() {

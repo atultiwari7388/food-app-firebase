@@ -28,7 +28,7 @@ class GridViewWidget extends StatelessWidget {
         automaticallyImplyLeading: false,
         iconTheme: IconThemeData(color: Colors.white),
         title: Text(
-          firebaseSubCollectionName!.toUpperCase(),
+          firebaseSubCollectionName!.trim().toUpperCase(),
           style: TextStyle(
             color: Colors.white,
             fontSize: 18.0,

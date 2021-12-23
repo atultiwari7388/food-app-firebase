@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:food_app/models/user_model.dart';
 import 'package:food_app/presentation/View/DetailsPage/details.page.view.dart';
 import 'package:food_app/presentation/View/Home/Components/card_section.dart';
+import 'package:food_app/presentation/View/Profile/profile.view.dart';
 import 'package:food_app/widgets/grid_view.widget.dart';
 import 'package:food_app/widgets/single_product.widget.dart';
 
 late UserModel userModel;
+
+Size? size;
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -53,7 +58,7 @@ class _HomeViewState extends State<HomeView> {
         // get category data
 
         Container(
-          height: 100,
+          height: size!.height * 0.14,
           child: StreamBuilder(
             stream:
                 FirebaseFirestore.instance.collection("categories").snapshots(),
@@ -136,7 +141,7 @@ class _HomeViewState extends State<HomeView> {
   Widget getAllProductData(
       {required Stream<QuerySnapshot<Map<String, dynamic>>>? stream}) {
     return Container(
-      height: 260,
+      height: size!.height / 2 - 90,
       child: StreamBuilder(
         stream: stream,
         builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
@@ -182,14 +187,43 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     getCurrentUserData();
+    size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         elevation: 0,
         title: Text('Explore'),
+        actions: [
+          PopupMenuButton<int>(
+              onSelected: (item) => onSelected(context, item),
+              itemBuilder: (BuildContext context) {
+                return [
+                  PopupMenuItem<int>(
+                    value: 0,
+                    child: Row(
+                      children: [
+                        Icon(IconlyBold.profile, color: Colors.green),
+                        const SizedBox(width: 12),
+                        Text("Profile"),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem<int>(
+                    value: 1,
+                    child: Row(
+                      children: [
+                        Icon(IconlyBold.logout, color: Colors.red),
+                        const SizedBox(width: 12),
+                        Text("LogOut"),
+                      ],
+                    ),
+                  ),
+                ];
+              })
+        ],
       ),
       body: ListView(
-        physics: BouncingScrollPhysics(),
+        // physics: BouncingScrollPhysics(),
         children: [
           SizedBox(height: 20),
           CardSection(),
@@ -259,6 +293,52 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
+// onselected function for appbar
+
+void onSelected(BuildContext context, int item) {
+  switch (item) {
+    case 0:
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ProfileView(),
+        ),
+      );
+      break;
+
+    case 1:
+      showCupertinoDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return CupertinoAlertDialog(
+            title: Text("LogOut"),
+            content: Text("Are you sure you want to logout?"),
+            actions: [
+              CupertinoDialogAction(
+                child: Text("Cancel"),
+                onPressed: () => Navigator.pop(context),
+              ),
+              CupertinoDialogAction(
+                child: Text("Logout"),
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                  Navigator.pop(context);
+                  FirebaseAuth.instance.signOut().then(
+                        (value) => Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          "/welcome",
+                          (route) => false,
+                        ),
+                      );
+                },
+              ),
+            ],
+          );
+        },
+      );
+  }
+}
+
 class PopularBrands extends StatelessWidget {
   const PopularBrands({
     Key? key,
@@ -275,8 +355,8 @@ class PopularBrands extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 10),
-      height: 200,
-      width: 100,
+      // height: 200,
+      width: size!.width / 2 - 80,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         // color: Colors.red,
@@ -342,8 +422,7 @@ class Categories extends StatelessWidget {
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.all(12.0),
-        height: 100,
-        width: 140,
+        width: size!.width / 2 - 10,
         decoration: BoxDecoration(
           image: DecorationImage(
               image: NetworkImage(categoryImage!), fit: BoxFit.cover),
