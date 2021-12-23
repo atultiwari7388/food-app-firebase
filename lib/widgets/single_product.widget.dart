@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:food_app/presentation/View/Home/home.view.dart';
 
 class SingleProductWidget extends StatelessWidget {
   const SingleProductWidget({
@@ -23,8 +24,8 @@ class SingleProductWidget extends StatelessWidget {
         children: [
           Container(
             margin: EdgeInsets.all(12.0),
-            height: 200,
-            width: 150,
+            height: size!.height * 0.26 + 10,
+            width: size!.width / 2 - 20,
             decoration: BoxDecoration(
               image: DecorationImage(
                   image: NetworkImage(image), fit: BoxFit.cover),
