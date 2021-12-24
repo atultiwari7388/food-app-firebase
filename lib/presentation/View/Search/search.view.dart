@@ -28,41 +28,39 @@ class _SearchViewState extends State<SearchView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text('Search'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Material(
-                borderRadius: BorderRadius.circular(10),
-                elevation: 3,
-                child: TextFormField(
-                  onChanged: (value) {
-                    setState(() {
-                      query = value;
-                    });
-                  },
-                  decoration: InputDecoration(
-                    hintText: "Search for food",
-                    fillColor: Colors.white,
-                    prefixIcon: Icon(Icons.search),
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide.none,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(14.0),
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.blueGrey.shade100,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        query = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Search for food",
+                      hintStyle: TextStyle(color: Colors.white),
+                      prefixIcon: Icon(Icons.search),
+                      filled: true,
+                      border: InputBorder.none,
                     ),
                   ),
                 ),
               ),
-            ),
-            query == ""
-                ? Lottie.asset("assets/notfo.json", fit: BoxFit.cover)
-                : ListView(
-                    children: [
-                      StreamBuilder(
+              query == ""
+                  ? Lottie.asset("assets/notfo.json", fit: BoxFit.cover)
+                  : Container(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: StreamBuilder(
                         stream: FirebaseFirestore.instance
                             .collection("products")
                             .snapshots(),
@@ -86,15 +84,17 @@ class _SearchViewState extends State<SearchView> {
                                     ),
                                   ),
                                 )
-                              : ListView.builder(
+                              : GridView.builder(
+                                  shrinkWrap: true,
+                                  physics: ScrollPhysics(),
                                   itemCount: result.length,
-                                  // gridDelegate:
-                                  //     SliverGridDelegateWithFixedCrossAxisCount(
-                                  //   crossAxisCount: 2,
-                                  //   crossAxisSpacing: 5.0,
-                                  //   mainAxisSpacing: 5.0,
-                                  //   childAspectRatio: 0.5,
-                                  // ),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    crossAxisSpacing: 5.0,
+                                    mainAxisSpacing: 5.0,
+                                    childAspectRatio: 0.67,
+                                  ),
                                   itemBuilder: (context, index) {
                                     var data = searchData[index];
                                     return SingleProductWidget(
@@ -125,9 +125,9 @@ class _SearchViewState extends State<SearchView> {
                                 );
                         },
                       ),
-                    ],
-                  ),
-          ],
+                    ),
+            ],
+          ),
         ),
       ),
     );
