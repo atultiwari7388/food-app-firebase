@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:food_app/presentation/View/Cart/cart.view.dart';
 import 'package:food_app/presentation/View/Home/home.view.dart';
+import 'package:food_app/presentation/View/favorites/favorites.screen.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({Key? key}) : super(key: key);
@@ -82,7 +85,14 @@ class _ProfileViewState extends State<ProfileView> {
                     color: Theme.of(context).primaryColor,
                   ),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FavoriteScreen(),
+                        ),
+                      );
+                    },
                     icon: Icon(
                       Icons.arrow_forward_ios,
                       color: Theme.of(context).primaryColor,
@@ -95,7 +105,6 @@ class _ProfileViewState extends State<ProfileView> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onTap: () {},
                 ),
               ),
             ),
@@ -109,7 +118,14 @@ class _ProfileViewState extends State<ProfileView> {
                     color: Theme.of(context).primaryColor,
                   ),
                   trailing: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => CartView(),
+                        ),
+                      );
+                    },
                     icon: Icon(
                       Icons.arrow_forward_ios,
                       color: Theme.of(context).primaryColor,
@@ -122,7 +138,6 @@ class _ProfileViewState extends State<ProfileView> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onTap: () {},
                 ),
               ),
             ),
@@ -164,13 +179,37 @@ class _ProfileViewState extends State<ProfileView> {
                   ),
                   TextButton(
                     onPressed: () {
-                      FirebaseAuth.instance.signOut().then(
-                            (value) => Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              "/welcome",
-                              (route) => false,
-                            ),
+                      showCupertinoDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CupertinoAlertDialog(
+                            title: Text("LogOut"),
+                            content: Text(
+                                "Are you sure you want to logout from the app?"),
+                            actions: [
+                              CupertinoDialogAction(
+                                child: Text("Cancel"),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              CupertinoDialogAction(
+                                child: Text("Logout"),
+                                onPressed: () {
+                                  FirebaseAuth.instance.signOut();
+                                  Navigator.pop(context);
+                                  FirebaseAuth.instance.signOut().then(
+                                        (value) =>
+                                            Navigator.pushNamedAndRemoveUntil(
+                                          context,
+                                          "/welcome",
+                                          (route) => false,
+                                        ),
+                                      );
+                                },
+                              ),
+                            ],
                           );
+                        },
+                      );
                     },
                     child: Text(
                       "Logout",

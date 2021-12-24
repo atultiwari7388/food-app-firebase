@@ -14,11 +14,11 @@ class CartView extends StatelessWidget {
     cartProvider.getCartData();
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 1.0,
-        title: Text('Cart'),
-      ),
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   elevation: 1.0,
+      //   title: Text('Cart'),
+      // ),
       bottomSheet: cartProvider.getCartListData.isEmpty
           ? Container(
               child: Text(
@@ -44,33 +44,35 @@ class CartView extends StatelessWidget {
           ? Center(
               child: Lottie.asset("assets/emptycart.json", fit: BoxFit.cover),
             )
-          : ListView.separated(
-              physics: BouncingScrollPhysics(),
-              separatorBuilder: (context, index) {
-                return Divider(
-                  color: Colors.grey,
-                  height: 1.0,
-                );
-              },
-              itemCount: cartProvider.getCartListData.length,
-              itemBuilder: (context, index) {
-                var data = cartProvider.cartLists[index];
+          : SafeArea(
+              child: ListView.separated(
+                physics: BouncingScrollPhysics(),
+                separatorBuilder: (context, index) {
+                  return Divider(
+                    color: Colors.grey,
+                    height: 1.0,
+                  );
+                },
+                itemCount: cartProvider.getCartListData.length,
+                itemBuilder: (context, index) {
+                  var data = cartProvider.cartLists[index];
 
-                // if (!streamSnapshot.hasData) {
-                //   return Center(
-                //     child: CircularProgressIndicator(),
-                //   );
-                // }
+                  if (cartProvider.cartLists.length == 0) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-                return CartWidget(
-                  productName: data.productName,
-                  productImage: data.productImage,
-                  productPrice: data.productPrice,
-                  productQuantity: data.productQuantity,
-                  productCategory: data.productCategory,
-                  productId: data.productId,
-                );
-              },
+                  return CartWidget(
+                    productName: data.productName,
+                    productImage: data.productImage,
+                    productPrice: data.productPrice,
+                    productQuantity: data.productQuantity,
+                    productCategory: data.productCategory,
+                    productId: data.productId,
+                  );
+                },
+              ),
             ),
     );
   }
